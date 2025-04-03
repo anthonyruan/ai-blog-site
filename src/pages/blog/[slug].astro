@@ -5,7 +5,7 @@ import { marked } from 'marked';
 import { Astro } from 'astro';
 
 const { slug } = Astro.params;
-const filePath = new URL(`../../../content/blog/${slug}.md`, import.meta.url);
+const filePath = new URL(`../../content/blog/${slug}.md`, import.meta.url);
 
 // 读取 .md 文件内容
 const rawContent = fs.readFileSync(filePath, 'utf-8');
