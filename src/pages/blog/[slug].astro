@@ -1,1 +1,35 @@
+---
+import fs from 'fs';
+import path from 'path';
+import { marked } from 'marked';
+import { Astro } from 'astro';
 
+const { slug } = Astro.params;
+const filePath = new URL(`../../../content/blog/${slug}.md`, import.meta.url);
+
+// 读取 .md 文件内容
+const rawContent = fs.readFileSync(filePath, 'utf-8');
+
+// 分离 frontmatter 和正文
+const frontMatterMatch = rawContent.match(/^---[\s\S]+?---/);
+const frontMatter = frontMatterMatch ? frontMatterMatch[0] : '';
+const body = rawContent.replace(frontMatter, '').trim();
+const html = marked.parse(body);
+
+// 提取标题和日期
+const title = frontMatter?.match(/title: (.+)/)?.[1] ?? 'Untitled';
+const date = frontMatter?.match(/date: (.+)/)?.[1] ?? '';
+---
+
+<html lang="en">
+  <head>
+    <title>{title}</title>
+  </head>
+  <body>
+    <article>
+      <h1>{title}</h1>
+      <p><em>{date}</em></p>
+      <div innerHTML={html} />
+    </article>
+  </body>
+</html>
