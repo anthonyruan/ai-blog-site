@@ -1,0 +1,28 @@
+---
+import fs from 'fs';
+import path from 'path';
+const blogDir = '../../src/content/blog/';
+const files = fs.readdirSync(new URL(blogDir, import.meta.url));
+const posts = files.map(file => {
+  const content = fs.readFileSync(new URL(`${blogDir}${file}`, import.meta.url), 'utf-8');
+  const [frontMatter] = content.match(/---[\s\S]+?---/) || [];
+  const title = frontMatter?.match(/title: (.+)/)?.[1] ?? 'Untitled';
+  const date = frontMatter?.match(/date: (.+)/)?.[1] ?? '';
+  return { file, title, date };
+});
+---
+<html>
+  <head>
+    <title>時間線</title>
+  </head>
+  <body>
+    <h1>我的學習時間線</h1>
+    <ul>
+      {posts.map(post => (
+        <li>
+          <a href={`/blog/${post.file.replace('.md', '')}`}>{post.title}</a> - {post.date}
+        </li>
+      ))}
+    </ul>
+  </body>
+</html>
