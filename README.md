@@ -1,2 +1,1 @@
-# ai-blog-site
-My personal AI learning blog powered by Astro
+# Fixed Astro Blog for Vercel
